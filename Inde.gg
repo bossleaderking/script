@@ -14679,7 +14679,7 @@ do
 
                     local Locations = {
                         ["Deli Market 🥪"] = CFrame.new(-769, 255, -686);
-                        ["Capital One Bank 🏦"] = CFrame.new(-225, 284, -1223);
+                        ["Capital One Bank 🏦"] = CFrame.new(-1212.52, 253.78, -3644.27);
                         ["Ice Box 🧊"] = CFrame.new(-198.8927001953125, 283.8486633300781, -1170.4500732421875);
                         ["Hotel 🏨"] = CFrame.new(-973, 254, -939);
                         ["Drip Store 👓"] = CFrame.new(67462.6953125, 10489.0322265625, 546.6762084960938);
