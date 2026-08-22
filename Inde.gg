@@ -1,6 +1,99 @@
+if LPH_OBFUSCATED == nil then
+    local assert = assert
+    local type = type
+    local setfenv = setfenv
+    LPH_ENCNUM = function(toEncrypt, ...)
+        assert(type(toEncrypt) == "number" and #{...} == 0, "LPH_ENCNUM only accepts a single constant double or integer as an argument.")
+        return toEncrypt
+    end
+    LPH_NUMENC = LPH_ENCNUM
+    LPH_ENCSTR = function(toEncrypt, ...)
+        assert(type(toEncrypt) == "string" and #{...} == 0, "LPH_ENCSTR only accepts a single constant string as an argument.")
+        return toEncrypt
+    end
+    LPH_STRENC = LPH_ENCSTR
+    LPH_ENCFUNC = function(toEncrypt, encKey, decKey, ...)
+        
+        assert(type(toEncrypt) == "function" and type(encKey) == "string" and #{...} == 0, "LPH_ENCFUNC accepts a constant function, constant string, and string variable as arguments.")
+        return toEncrypt
+    end
+    LPH_FUNCENC = LPH_ENCFUNC
+    LPH_JIT = function(f, ...)
+        assert(type(f) == "function" and #{...} == 0, "LPH_JIT only accepts a single constant function as an argument.")
+        return f
+    end
+    LPH_JIT_MAX = LPH_JIT
+    LPH_NO_VIRTUALIZE = function(f, ...)
+        assert(type(f) == "function" and #{...} == 0, "LPH_NO_VIRTUALIZE only accepts a single constant function as an argument.")
+        return f
+    end
+    LPH_NO_UPVALUES = function(f, ...)
+        assert(type(setfenv) == "function", "LPH_NO_UPVALUES can only be used on Lua versions with getfenv & setfenv")
+        assert(type(f) == "function" and #{...} == 0, "LPH_NO_UPVALUES only accepts a single constant function as an argument.")
+        local env = getrenv()
+        return setfenv(
+            LPH_NO_VIRTUALIZE(function(...)
+                return func(...)
+            end),
+            setmetatable(
+                {
+                    func = f
+                },
+                {
+                    __index = env,
+                    __newindex = env
+                }
+            )
+        )
+    end
+    LPH_CRASH = function(...)
+        assert(#{...} == 0, "LPH_CRASH does not accept any arguments.")
+        game:Shutdown()
+        while true do end
+    end
+    LRM_IsUserPremium = false
+    LRM_LinkedDiscordID = "1096603799159832636"
+    LRM_ScriptName = "valary"
+    LRM_TotalExecutions = 0
+    LRM_SecondsLeft = math.huge
+    LRM_UserNote = "Developer";
+end;
+
+local Window, Watermark;
+
+if getgenv().valary_loaded then
+    return
+end
+
+getgenv().valary_loaded = true
+
+local LoadingTick = os.clock()
+
+local gethui = gethui or function()
+    return game.CoreGui
+end
+
+hookfunction(isfunctionhooked, function()
+    return false
+end)
+
+local Library = {Friendly_Players = {}, Priority_Players = {}, Selected_Player = nil}
+
+local Volcano = string.find(getexecutorname():lower(), "volcano") ~= nil
+
+local Services = setmetatable({}, {
+    __index = LPH_NO_VIRTUALIZE(function(self, service, key) 
+        return (cloneref ~= nil) and cloneref(game:GetService(service)) or game:GetService(service)
+    end)
+})
+
+for Index, Value in getconnections(gethui().ChildRemoved) do
+    Value:Disable()
+end
+
 local Config = {
     ["Gun_Handle"] = nil;
-    ["Inde_Users"] = {};
+    ["Valary_Users"] = {};
 
     Tracers = {
         Enabled = false;
@@ -263,7 +356,7 @@ local FireServer, InvokeServer, UnreliableFireServer = Instance.new("RemoteEvent
 
 if isfunctionhooked then
     if isfunctionhooked(FireServer) or isfunctionhooked(UnreliableFireServer) or isfunctionhooked(InvokeServer) and LPH_OBFUSCATED then
-        return Services.Players.LocalPlayer:Kick("Inde.gg | Security : You are running another script, please disable it and execute again")
+        return Services.Players.LocalPlayer:Kick("Valary.gg | Security : You are running another script, please disable it and execute again")
     end
 end
 
@@ -4275,7 +4368,7 @@ do -- Library
 
             if not Success then
                 Library:Notification({
-                    Name = "Inde.gg | Error",
+                    Name = "Valary.gg | Error",
                     Description = "Error caught, please report it in the discord.\n"..Result,
                     Duration = 10,
                 })
@@ -12371,22 +12464,22 @@ do
                         pcall(function()
                             local decoded_user = base64.decode(string.reverse(v.username))
 
-                            if not Config.Inde_Users[decoded_user] then
-                                Config.Inde_Users[decoded_user] = i
+                            if not Config.Valary_Users[decoded_user] then
+                                Config.Valary_Users[decoded_user] = i
                             end
                         end)
                     end
 
                     local toRemove = {}
 
-                    for username, id in Config.Inde_Users do
+                    for username, id in Config.Valary_Users do
                         if not Messages.users.stored[id] then
                             table.insert(toRemove, username)
                         end
                     end
 
                     for _, username in toRemove do
-                        Config.Inde_Users[username] = nil
+                        Config.Valary_Users[username] = nil
                     end
 
                     for _, v in pairs(Messages.messages) do
@@ -14214,7 +14307,7 @@ do
                     ManualFarm_Section:Button({Name = "Clean All Filthy Money", Callback = function()
                         if LocalPlayer.stored.FilthyStack.Value == 0 then 
                             return Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = "You don't have any filthy cash!",
                                 Duration = 5,
                                 Icon = "97118059177470",
@@ -14229,7 +14322,7 @@ do
                         
                         if not Cleaner then
                             return Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = "Couldn't find a good cleaner!",
                                 Duration = 5,
                                 Icon = "97118059177470",
@@ -14360,7 +14453,7 @@ do
                         if Check then
                             Config:DeleteHiddenScreen()
                             Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = "Couldn't find the items! Please make sure you have more than $5,000",
                                 Duration = 10,
                                 Icon = "97118059177470",
@@ -14443,7 +14536,7 @@ do
                     local Cooldown = false; Vuln_Section:Button({Name = "Duplicate Current Item", Tooltip = "You need to hold the gun you're trying to dupe.\nIf it doesn't work, retry.", Callback = function()
                         if Cooldown then
                             Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = "Cooldown! Please wait.",
                                 Duration = 5,
                                 Icon = "97118059177470",
@@ -14460,7 +14553,7 @@ do
 
                         if not Tool then
                             Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = "Couldn't find your tool! Please make sure you're holding one.",
                                 Duration = 10,
                                 Icon = "97118059177470",
@@ -14518,7 +14611,7 @@ do
 
                         if not Tool and State then
                             Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = "Couldn't find your tool! Please make sure you're holding one.",
                                 Duration = 10,
                                 Icon = "97118059177470",
@@ -14660,7 +14753,7 @@ do
 
                         if not FORCED then
                             Library:Notification({
-                                Name = "Inde.gg | Success",
+                                Name = "Valary.gg | Success",
                                 Description = string.format("Successfully took %s out of your safe!", ToolName),
                                 Duration = 5,
                                 Icon = "116339777575852",
@@ -14668,7 +14761,7 @@ do
                             })
                         else
                             Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = string.format("Couldn't get %s from your safe!", ToolName),
                                 Duration = 5,
                                 Icon = "97118059177470",
@@ -14715,7 +14808,7 @@ do
 
                         if not FORCED then
                             Library:Notification({
-                                Name = "Inde.gg | Success",
+                                Name = "Valary.gg | Success",
                                 Description = string.format("Successfully safed your %s!", Tool),
                                 Duration = 5,
                                 Icon = "116339777575852",
@@ -14723,7 +14816,7 @@ do
                             })
                         else
                             Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = string.format("Couldn't safe your %s!", Tool),
                                 Duration = 5,
                                 Icon = "97118059177470",
@@ -14764,7 +14857,7 @@ do
                         local Prompt = Workspace:FindFirstChild("GUNS")[self]:FindFirstChildWhichIsA("ProximityPrompt",true);
                         if (Workspace:FindFirstChild("GUNS")[self]:FindFirstChild("GamepassID", true) and not MarketplaceService:UserOwnsGamePassAsync(LocalPlayer.UserId, Workspace:FindFirstChild("GUNS")[self]:FindFirstChild("GamepassID",true).Value)) then 
                             return Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = "You do not own this gamepass!",
                                 Duration = 7.5,
                                 Icon = "97118059177470",
@@ -14775,7 +14868,7 @@ do
                         local Part = Prompt.Parent:IsA("Part") and Prompt.Parent.CFrame or Prompt.Parent:IsA("MeshPart") and Prompt.Parent.CFrame or Prompt.Parent:IsA("UnionOperation") and Prompt.Parent.CFrame;
                         if LocalPlayer.stored.Money.Value < Workspace:FindFirstChild("GUNS")[self]:FindFirstChild("Price",true).Value then
                             return Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = string.format("You are $%s short!", Workspace:FindFirstChild("GUNS")[self]:FindFirstChild("Price",true).Value - LocalPlayer.stored.Money.Value),
                                 Duration = 7.5,
                                 Icon = "97118059177470",
@@ -14803,7 +14896,7 @@ do
                         repeat task.wait(); fireproximityprompt(Prompt); until ItemReceieved == true;
                         
                         Library:Notification({
-                            Name = "Inde.gg | Success",
+                            Name = "Valary.gg | Success",
                             Description = "Successfully purchased "..Library.Flags["TheBronx3/SelectItemToPurchase"],
                             Duration = 5,
                             Icon = "116339777575852",
@@ -14907,7 +15000,7 @@ do
                         if not Library.Flags["TheBronx3/VehicleSpawner/SelectVehicle"] then return end
                         if not replicatesignal then
                             return Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = "Your executor doesnt support 'replicatesignal' , get a better executor!",
                                 Duration = 10,
                                 Icon = "97118059177470",
@@ -14928,7 +15021,7 @@ do
 
                         if LocalPlayer.PlayerGui.GunGui.Holder.Buy.Text:lower() == "buy" then
                             return Library:Notification({
-                                Name = "Inde.gg | Error!",
+                                Name = "Valary.gg | Error!",
                                 Description = "You don't own this car!",
                                 Duration = 5,
                                 Icon = "97118059177470",
@@ -15364,7 +15457,7 @@ do
                 
                         if Server.id == game.JobId then
                             Library:Notification({
-                                Name = "Inde.gg | Servers",
+                                Name = "Valary.gg | Servers",
                                 Description = "You are currently in the smallest server!",
                                 Duration = 5,
                                 Icon = "97118059177470",
@@ -15522,7 +15615,7 @@ if not UserInputService.TouchEnabled then
 end
 
 Library:Notification({
-    Name = "Inde.gg | Loader",
+    Name = "Valary.gg | Loader",
     Description = "loaded in: " .. string.sub(tostring(os.clock() - LoadingTick), 1, 4).. "s",
     Duration = 10
 })
