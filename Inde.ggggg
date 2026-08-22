@@ -53,7 +53,7 @@ if LPH_OBFUSCATED == nil then
     end
     LRM_IsUserPremium = false
     LRM_LinkedDiscordID = "1096603799159832636"
-    LRM_ScriptName = "valary"
+    LRM_ScriptName = "Inde"
     LRM_TotalExecutions = 0
     LRM_SecondsLeft = math.huge
     LRM_UserNote = "Developer";
@@ -61,11 +61,11 @@ end;
 
 local Window, Watermark;
 
-if getgenv().valary_loaded then
+if getgenv().Inde_loaded then
     return
 end
 
-getgenv().valary_loaded = true
+getgenv().Inde_loaded = true
 
 local LoadingTick = os.clock()
 
@@ -389,14 +389,14 @@ do -- FrameWork
         frame.Parent = Black_UI
     
         local textLabel = Instance.new("TextLabel")
-        textLabel.Name = "\nhideuivalary"
+        textLabel.Name = "\nhideuiInde"
         textLabel.Size = UDim2.new(0, 400, 0, 100)
         textLabel.Font = Enum.Font.SourceSansBold
         textLabel.RichText = true
         local accent = Library.Theme.Accent
         local accentString = string.format("rgb(%d,%d,%d)", accent.R * 255, accent.G * 255, accent.B * 255)
 
-        textLabel.Text = '<font color="' .. accentString .. '">valary</font>\n' .. Title
+        textLabel.Text = '<font color="' .. accentString .. '">Inde</font>\n' .. Title
         textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         textLabel.BackgroundTransparency = 1
         textLabel.TextSize = 36
@@ -416,7 +416,7 @@ do -- FrameWork
             local accent = Library.Theme.Accent
             local accentString = string.format("rgb(%d,%d,%d)", accent.R * 255, accent.G * 255, accent.B * 255)
 
-            Black_UI["\nhideuivalary"].Text = '<font color="' .. accentString .. '">valary</font>\n' .. Text
+            Black_UI["\nhideuiInde"].Text = '<font color="' .. accentString .. '">Inde</font>\n' .. Text
         end
     end)
 
@@ -3495,10 +3495,10 @@ do -- Library
         },
 
         Folders = {
-            Directory = "valary",
-            Configs = "valary/TheBronx3Configs",
-            Assets = "valary/Assets",
-            Themes = "valary/Themes"
+            Directory = "Inde",
+            Configs = "Inde/TheBronx3Configs",
+            Assets = "Inde/Assets",
+            Themes = "Inde/Themes"
         },
 
         Images = { -- you're welcome to reupload the images and replace it with your own links
@@ -4547,14 +4547,14 @@ do -- Library
 
         if Theme == "Accent" and Window then
             Window:SetText(string.format(
-                '<font color="rgb(255,255,255)">valary.</font><font color="rgb(%d,%d,%d)">gg</font> | %s',
+                '<font color="rgb(255,255,255)">Inde.</font><font color="rgb(%d,%d,%d)">gg</font> | %s',
                 Color.R*255,
                 Color.G*255,
                 Color.B*255,
                 Game_Name_MarketPlaceService
             ))
 
-            Watermark:SetText(string.format('<font color="rgb(255,255,255)">valary.</font><font color="rgb(%d,%d,%d)">gg</font> - %s - %s',Color.R*255,Color.G*255,Color.B*255, Game_Name_MarketPlaceService, os.date("%b. %d %Y, %X")))
+            Watermark:SetText(string.format('<font color="rgb(255,255,255)">Inde.</font><font color="rgb(%d,%d,%d)">gg</font> - %s - %s',Color.R*255,Color.G*255,Color.B*255, Game_Name_MarketPlaceService, os.date("%b. %d %Y, %X")))
         end
 
         for _, Item in self.ThemeItems do
@@ -12288,7 +12288,7 @@ end
 -- Example
 do
     Window = Library:Window({
-        Name = '<font color="rgb(255,255,255)">valary.</font><font color="rgb(236,23,23)">gg</font> | '..Game_Name_MarketPlaceService,
+        Name = '<font color="rgb(255,255,255)">Inde.</font><font color="rgb(236,23,23)">gg</font> | '..Game_Name_MarketPlaceService,
         Version = "v1.0.0",
         Logo = "135215559087473",
         FadeSpeed = 0.25,
@@ -12341,8 +12341,8 @@ do
         ["1096603799159832636"] = ' - <font color="#EC1717">Owner</font>'
     }
     
-    if not isfolder("valary/Assets/Profiles") then
-        makefolder("valary/Assets/Profiles")
+    if not isfolder("Inde/Assets/Profiles") then
+        makefolder("Inde/Assets/Profiles")
     end
 
     function Chat_API.GetDiscordProfile(Discord_ID)
@@ -12356,11 +12356,11 @@ do
         local avatar = Cached_Data[Discord_ID].avatar
         local ext = avatar.is_animated and ".gif" or ".png"
 
-        if not isfile("valary/Assets/Profiles/"..Discord_ID..ext) then
+        if not isfile("Inde/Assets/Profiles/"..Discord_ID..ext) then
             if not avatar.link then
-                writefile("valary/Assets/Profiles/"..Discord_ID..ext, game:HttpGet('https://raw.githubusercontent.com/ValarySoftworks/Assets/refs/heads/main/download.png'))
+                writefile("Inde/Assets/Profiles/"..Discord_ID..ext, game:HttpGet('https://raw.githubusercontent.com/ValarySoftworks/Assets/refs/heads/main/download.png'))
             else
-                writefile("valary/Assets/Profiles/"..Discord_ID..ext, game:HttpGet(avatar.link))
+                writefile("Inde/Assets/Profiles/"..Discord_ID..ext, game:HttpGet(avatar.link))
             end
         end
 
@@ -12370,7 +12370,7 @@ do
             Name..=Special_DiscordIDS[Discord_ID]
         end
 
-        return getcustomasset("valary/Assets/Profiles/"..Discord_ID..ext), Name
+        return getcustomasset("Inde/Assets/Profiles/"..Discord_ID..ext), Name
     end
 
     task.spawn(function()
@@ -12567,7 +12567,7 @@ do
 
     task.spawn(LPH_NO_VIRTUALIZE(function()
         while task.wait(1) do
-            Watermark:SetText(string.format('<font color="rgb(255,255,255)">valary.</font><font color="rgb(%d,%d,%d)">gg</font> - %s - %s',Library.Theme.Accent.R*255,Library.Theme.Accent.G*255,Library.Theme.Accent.B*255, Game_Name_MarketPlaceService, os.date("%b. %d %Y, %X")))
+            Watermark:SetText(string.format('<font color="rgb(255,255,255)">Inde.</font><font color="rgb(%d,%d,%d)">gg</font> - %s - %s',Library.Theme.Accent.R*255,Library.Theme.Accent.G*255,Library.Theme.Accent.B*255, Game_Name_MarketPlaceService, os.date("%b. %d %Y, %X")))
         end
     end))
 
