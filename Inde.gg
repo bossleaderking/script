@@ -12754,9 +12754,6 @@ do
                     Config.Silent.HitChance = State
                 end})
 
-                SilentAim_Section:Slider({Name = "Spread Amount",Flag = "SilentAim_Spread",Default = 0.05,Min = 0,Max = 0.5,Decimals = 0.01,Callback = function(State)Config.Silent.Spread = State
-                end})
-
                 SilentAim_Section:Dropdown({
                     Name = "Select Hit Parts",
                     Flag = "SilentAim_HitParts",
