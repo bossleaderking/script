@@ -14724,7 +14724,7 @@ do
                         local ToolName = Library.Flags["TheBronx3/SelectItem/Safe"]
                         if not ToolName then return end
 
-                        Config:Teleport(Safe.ChestClicker.CFrame + Vector3.new(0,3,0))
+                        Config:Teleport(Safe.ChestClicker.CFrame + Vector3.new(-1570.41553, 259.455536, -4234.39551, -1, 0, -0, 0, 0, -1, 0, -1, -0)
 
                         local RECIEVED = false
                         local FORCED = false
@@ -14779,7 +14779,7 @@ do
                         Tool = Tool.Name
                         LocalPlayer.Character.Humanoid:UnequipTools()
 
-                        Config:Teleport(Safe.ChestClicker.CFrame + Vector3.new(0,3,0))
+                        Config:Teleport(Safe.ChestClicker.CFrame + Vector3.new(-1570.41553, 259.455536, -4234.39551, -1, 0, -0, 0, 0, -1, 0, -1, -0))
 
                         local SAFED = false
                         local FORCED = false
