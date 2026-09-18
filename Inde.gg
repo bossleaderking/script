@@ -14724,7 +14724,7 @@ do
                         local ToolName = Library.Flags["TheBronx3/SelectItem/Safe"]
                         if not ToolName then return end
 
-                        Config:Teleport(Safe.ChestClicker.CFrame + Vector3.new(0,3,0)
+                        Config:Teleport(Safe.ChestClicker.CFrame + Vector3.new(0,3,0))
 
                         local RECIEVED = false
                         local FORCED = false
