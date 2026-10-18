@@ -16,7 +16,7 @@ local WindowRef -- assigned right after CreateWindow below
 -- Linoria Library:Notify(message, duration) -> Concorde notifications
 function Library:Notify(text, duration)
     if WindowRef then
-        pcall(function() WindowRef:Notify("Hub In One", tostring(text), tonumber(duration) or 3, "Info") end)
+        pcall(function() WindowRef:Notify("Inde", tostring(text), tonumber(duration) or 3, "Info") end)
     end
 end
 
