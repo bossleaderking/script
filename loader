@@ -1,0 +1,140 @@
+-- ============================================================
+-- INDE LOADER
+-- Presents all your scripts in one ConcordeLib window.
+-- Each script loads from a URL (HttpGet + loadstring) — hit Inject to run it.
+--
+-- HOW TO ADD YOUR SCRIPTS:
+-- Edit the "Scripts" list below. One entry per script:
+--   { Name = "My Script", Description = "what it does", Url = "https://raw.githubusercontent.com/.../script.lua" },
+-- The Url must be a RAW link that returns plain Lua (e.g. GitHub raw file).
+-- ============================================================
+
+-- ▼▼▼ EDIT YOUR SCRIPT LIST HERE ▼▼▼
+local Scripts = {
+    {
+        Name = "Inde TB3",
+        Description = "The Bronx 3 Main Script",
+        Url = "https://raw.githubusercontent.com/bossleaderking/script/refs/heads/main/Inde.ggg", -- <-- paste the raw URL of Inde_TB3_Concorde.lua here
+    },
+
+     {
+       Name = "Inde VC2",
+       Description = "Vice City 2 Main Script",
+       Url = "https://raw.githubusercontent.com/bossleaderking/script/refs/heads/main/vc2",
+     },
+
+     {
+       Name = "Inde Rivals",
+       Description = "Rivals Main Script",
+       Url = "https://raw.githubusercontent.com/bossleaderking/script/refs/heads/main/rivals",
+     },
+
+     {
+       Name = "Inde Arcade Basketball",
+       Description = "Arcade Basketball Main Script",
+       Url = "https://raw.githubusercontent.com/bossleaderking/script/refs/heads/main/acrade%20basketball",
+     },
+
+
+}
+-- ▲▲▲ EDIT YOUR SCRIPT LIST HERE ▲▲▲
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ali-lov3/ConcordeLib/refs/heads/main/Source.lua"))()
+
+local Players = game:GetService("Players")
+local LP = Players.LocalPlayer
+
+local Window = Library:CreateWindow({
+    Title = "Inde Loader",
+    Logo = "rocket",
+    ConfigFolder = "IndeLoader",
+    OpenKey = Enum.KeyCode.RightShift,
+})
+
+local function Notify(title, text, duration, kind)
+    pcall(function() Window:Notify(title, text, duration or 3, kind or "Info") end)
+end
+
+---------------------------------------------------------------
+-- Inject logic
+---------------------------------------------------------------
+local Injected = {}
+
+local function Inject(entry)
+    if Injected[entry.Name] then
+        Notify("Loader", entry.Name .. " is already injected.", 3, "Warning")
+        return
+    end
+    if not entry.Url or entry.Url == "" then
+        Notify("Loader", "No URL set for " .. entry.Name .. " — edit the Scripts list at the Top of the loader file.", 5, "Error")
+        return
+    end
+    Notify("Loader", "Injecting " .. entry.Name .. "...", 3, "Info")
+    task.spawn(function()
+        local okHttp, src = pcall(function() return game:HttpGet(entry.Url) end)
+        if not okHttp or not src or src == "" then
+            Notify("Loader", "Failed to download " .. entry.Name .. ". Check the URL.", 5, "Error")
+            return
+        end
+        local fn, compileErr = (loadstring or load)(src)
+        if not fn then
+            Notify("Loader", entry.Name .. " failed to compile: " .. tostring(compileErr), 6, "Error")
+            return
+        end
+        local okRun, runErr = pcall(fn)
+        if not okRun then
+            Notify("Loader", entry.Name .. " errored: " .. tostring(runErr), 6, "Error")
+            return
+        end
+        Injected[entry.Name] = true
+        Notify("Loader", entry.Name .. " injected! Closing loader...", 2, "Success")
+        task.delay(1, function()
+            if Window and Window.Destroy then Window:Destroy() end
+        end)
+    end)
+end
+
+---------------------------------------------------------------
+-- UI
+---------------------------------------------------------------
+local Tabs = {
+    Scripts = Window:AddTab({ Name = "Scripts", Icon = "rocket" }),
+    Settings = Window:AddTab({ Name = "Settings", Icon = "settings" }),
+}
+
+-- Left: one block per script (Name, description, Inject button)
+local ScriptsGroup = Tabs.Scripts:AddGroupbox({ Name = "📜 All Scripts", Side = "Left" })
+for _, entry in ipairs(Scripts) do
+    ScriptsGroup:AddLabel("• " .. entry.Name .. (entry.Description ~= "" and (" — " .. entry.Description) or ""))
+    ScriptsGroup:AddButton({
+        Name = "▶ Inject " .. entry.Name,
+        Callback = function() Inject(entry) end,
+    })
+end
+
+-- Right: session info
+local InfoGroup = Tabs.Scripts:AddGroupbox({ Name = "ℹ️ Info", Side = "Right" })
+InfoGroup:AddLabel("Player: " .. (LP and LP.Name or "?"))
+InfoGroup:AddLabel("Executor: " .. (identifyexecutor and identifyexecutor() or "Unknown"))
+InfoGroup:AddLabel("Game ID: " .. tostring(game.PlaceId))
+InfoGroup:AddLabel("Scripts listed: " .. tostring(#Scripts))
+InfoGroup:AddLabel("Hit Inject to run a script — the loader closes once it injects.")
+
+-- Settings Tab
+local MenuGroup = Tabs.Settings:AddGroupbox({ Name = "💻 Menu", Side = "Left" })
+MenuGroup:AddLabel("Toggle menu: RightShift (rebind in the gear icon, Top-right)")
+MenuGroup:AddLabel("UI options (accent, watermark, GUI scale): gear icon, Top-right")
+MenuGroup:AddButton({
+    Name = "Close Loader",
+    Callback = function()
+        if Window and Window.Destroy then Window:Destroy() end
+    end,
+})
+
+-- Concorde toolbar managers (Top-right icons: keybinds / settings)
+-- Buttons only carry no saved values, so no Config Manager is needed here.
+Window:SettingManager()
+Window:SearchManager()
+Window:KeybindList()
+
+Notify("Inde Loader", "Loaded " .. tostring(#Scripts) .. " script(s). Pick one and hit Inject.", 4, "Success")
